@@ -1,0 +1,194 @@
+/* Home Page Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content:center;
+    gap:80px;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.language-selection {
+    max-width: 200px;
+}
+
+.language-selection select {
+    width: 100%;
+}
+
+.sidebar {
+    background-color: #343a40;
+    color: white;
+    width: 220px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 1rem 0;
+    padding: 16px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+.sidebar ul li a:hover {
+    color: #007bff;
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 2rem;
+}
+
+.main-content h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.card i {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Button styling with embedded link styling */
+button {
+    margin-top: 10px;
+    padding: 12px 20px; /* Increased padding for touch-friendly areas */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #007bff;
+    font-size: 1rem; /* Slightly larger font size */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+button:hover {
+    background-color: lightgreen;
+    transform: scale(1.05); /* Adds a slight scaling effect on hover */
+}
+
+button:active {
+    background-color: lightgreen; /* Darker color on click */
+    transform: scale(0.98); /* Adds a pressed effect on click */
+}
+
+/* Notification Section */
+.notifications {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border-radius: 5px;
+}
+
+.notifications h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.notification-item {
+    background-color: #ffffff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.notification-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.notification-link:hover {
+    text-decoration: underline;
+}
+
+/* Analytics Section */
+.analytics {
+    margin-top: 2rem;
+}
+
+.analytics h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Transit Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #17a2b8;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+        }
+        section {
+            padding: 20px;
+        }
+        h2 {
+            color: #17a2b8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .status {
+            font-weight: bold;
+        }
+        .in-transit { color: orange; }
+        .delivered { color: green; }
+        .pending { color: blue; }
+        .delayed { color: red; }
+        .out-for-delivery { color: purple; }
+        .returned { color: brown; }
+        .tracking-info { margin-top: 20px; }
+        .map-container { width: 100%; height: 400px; margin-top: 20px; }
+        .clickable {
+            color: #17a2b8;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .location-link {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .add-shipment-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-shipment-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+</head>
+<body>
+
+<header>
+    <h1>Medical Transit Tracking Dashboard</h1>
+</header>
+
+<section>
+    <h2>Track Your Shipment</h2>
+    
+    <form id="shipmentForm" onsubmit="return fetchShipmentDetails()">
+        <label for="shipmentId">Enter Shipment ID: </label>
+        <input type="text" id="shipmentId" placeholder="e.g., #MED12345" required>
+        <input type="submit" value="Track Shipment">
+    </form>
+
+    <h2>Active Shipments</h2>
+    <button class="add-shipment-btn" onclick="addShipment()">Add Shipment</button>
+    <table id="shipmentTable">
+        <thead>
+            <tr>
+                <th>Shipment ID</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Status</th>
+                <th>ETA</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="shipmentTableBody">
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <h2>Tracking Information</h2>
+    <div class="tracking-info">
+        <p><strong>Current Location:</strong> <span id="location">On Route to Destination</span></p>
+        <p><strong>Vehicle ID:</strong> <span id="vehicle-id">#TRUCK7890</span></p>
+        <p><strong>Driver:</strong> <span id="driver">John Doe</span></p>
+        <p><strong>Last Updated:</strong> <span id="lastUpdated">2:30 PM, Oct 24</span></p>
+    </div>
+    <div id="map" class="map-container"></div>
+</section>
+
+<script>
+const shipments = JSON.parse(localStorage.getItem('shipments')) || {};
+
+function initMap() {
+    const defaultLocation = { lat: 13.0827, lng: 80.2707 }; // Chennai, Tamil Nadu
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 8,
+        center: defaultLocation,
+    });
+
+    let marker = new google.maps.Marker({
+        position: defaultLocation,
+        map: map,
+        title: "Current Location"
+    });
+
+    window.updateMarker = function(lat, lng) {
+        const location = { lat: lat, lng: lng };
+        marker.setPosition(location);
+        map.setCenter(location);
+    }
+}
+
+function addShipment() {
+    const shipmentID = prompt("Enter Shipment ID:");
+    const origin = prompt("Enter Origin Location:");
+    const destination = prompt("Enter Destination Location:");
+    const status = prompt("Enter Status (e.g., In Transit, Delivered, etc.):");
+    const eta = prompt("Enter ETA:");
+
+    if (shipmentID && origin && destination && status && eta) {
+        const shipment = {
+            shipmentID,
+            origin,
+            destination,
+            status,
+            eta,
+            location: "On Route",
+            vehicleID: "#TRUCK1234",
+            driver: "John Doe",
+            lastUpdated: new Date().toLocaleString(),
+            lat: 13.0827,
+            lng: 80.2707,
+            deliveryTime: new Date().getTime() + 3600000 // Dummy delivery time 1 hour from now
+        };
+
+        shipments[shipmentID] = shipment;
+        localStorage.setItem('shipments', JSON.stringify(shipments));
+        populateActiveShipments();
+    } else {
+        alert("Please provide all the shipment details.");
+    }
+}
+
+function deleteShipment(shipmentID) {
+    if (confirm(`Are you sure you want to delete shipment ${shipmentID}?`)) {
+        delete shipments[shipmentID];
+        localStorage.setItem('shipments', JSON.stringify(shipments));
+        populateActiveShipments();
+    }
+}
+
+function populateActiveShipments() {
+    const shipmentTableBody = document.getElementById("shipmentTableBody");
+    shipmentTableBody.innerHTML = ''; // Clear existing rows
+
+    for (const shipmentId in shipments) {
+        const shipment = shipments[shipmentId];
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><span class="clickable" onclick="displayShipmentDetails('${shipmentId}')">${shipment.shipmentID}</span></td>
+            <td>${shipment.origin}</td>
+            <td>${shipment.destination}</td>
+            <td class="status ${shipment.status.toLowerCase().replace(/ /g, '-')}">${shipment.status}</td>
+            <td>${shipment.eta}</td>
+            <td><a class="location-link" href="https://www.google.com/maps?q=${shipment.lat},${shipment.lng}" target="_blank">View Location</a></td>
+            <td><button onclick="deleteShipment('${shipmentId}')">Delete</button></td>
+        `;
+
+        shipmentTableBody.appendChild(row);
+    }
+}
+
+function updateAllShipmentStatuses() {
+    const currentTime = new Date().getTime();
+
+    for (const shipmentId in shipments) {
+        const shipment = shipments[shipmentId];
+
+        if (shipment.deliveryTime && currentTime >= shipment.deliveryTime && shipment.status !== 'Delivered') {
+            shipment.status = 'Delivered';
+            shipment.location = `Delivered at ${shipment.destination}`;
+            shipment.eta = 'Delivered';
+        }
+    }
+
+    populateActiveShipments();
+}
+
+function fetchShipmentDetails() {
+    const shipmentId = document.getElementById("shipmentId").value.trim();
+    displayShipmentDetails(shipmentId);
+    return false;
+}
+
+function displayShipmentDetails(shipmentId) {
+    if (shipments[shipmentId]) {
+        const shipment = shipments[shipmentId];
+        document.getElementById("location").textContent = shipment.location;
+        document.getElementById("vehicle-id").textContent = shipment.vehicleID;
+        document.getElementById("driver").textContent = shipment.driver;
+        document.getElementById("lastUpdated").textContent = shipment.lastUpdated;
+
+        // Update the map with the shipment's current location
+        if (shipment.lat && shipment.lng) {
+            updateMarker(shipment.lat, shipment.lng);
+        }
+
+    } else {
+        alert('Shipment ID not found.');
+    }
+}
+
+populateActiveShipments(); // Initial load of shipments
+setInterval(updateAllShipmentStatuses, 10000); // Periodically update shipment statuses
+</script>
+
+</body>
+</html>

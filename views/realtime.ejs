@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Location Tracker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        .container { display: flex; height: 100vh; }
+        .sidebar { width: 300px; background: #f8f9fa; padding: 20px; overflow-y: auto; }
+        .main-content { flex: 1; display: flex; flex-direction: column; }
+        #map { flex: 1; background: #e9ecef; }
+        .header { background: #343a40; color: white; padding: 1rem; }
+        .location-list { margin-top: 20px; }
+        .location-item { background: white; padding: 15px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; }
+        .location-item:hover { background: #f1f3f5; }
+        .btn { display: block; width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 10px; }
+        .btn:hover { background: #0056b3; }
+        .status { padding: 10px; background: #e9ecef; border-radius: 5px; margin-bottom: 10px; }
+        .controls { padding: 10px; background: white; border-bottom: 1px solid #dee2e6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Location Tracker</h2>
+            <div class="status">
+                <p>Active Vehicles: <span id="activeCount">5</span></p>
+                <p>Total Routes: <span id="routeCount">8</span></p>
+            </div>
+            <button class="btn" onclick="toggleTracking()">Start Tracking</button>
+            <button class="btn" onclick="showAllLocations()">Show All Locations</button>
+            
+            <div class="location-list">
+                <h3>Active Locations</h3>
+                <div id="locationItems"></div> <!-- Placeholder for dynamic location items -->
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Deliver Location Track</h1>
+            </div>
+            
+            <div class="controls">
+                <label>
+                    <input type="checkbox" onchange="toggleRealtime()"> Enable Real-time Updates
+                </label>
+            </div>
+            
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the map
+        let map = L.map('map').setView([40.7128, -74.0060], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        let markers = {};
+        let tracking = false;
+
+        // Sample locations with Order IDs
+        const locations = [
+            { id: 1, lat: 40.7128, lng: -74.0060, name: "Vehicle #1", orderID: "ORD12345" },
+            { id: 2, lat: 40.7580, lng: -73.9855, name: "Vehicle #2", orderID: "ORD67890" }
+        ];
+
+        function initializeMarkers() {
+            locations.forEach(loc => {
+                markers[loc.id] = L.marker([loc.lat, loc.lng])
+                    .bindPopup(loc.name)
+                    .addTo(map);
+            });
+        }
+
+        function toggleTracking() {
+            tracking = !tracking;
+            const btn = document.querySelector('.btn');
+            btn.textContent = tracking ? 'Stop Tracking' : 'Start Tracking';
+            
+            if (tracking) {
+                startUpdates();
+            }
+        }
+
+        function startUpdates() {
+            if (!tracking) return;
+            
+            // Simulate location updates
+            locations.forEach(loc => {
+                loc.lat += (Math.random() - 0.5) * 0.001;
+                loc.lng += (Math.random() - 0.5) * 0.001;
+                
+                if (markers[loc.id]) {
+                    markers[loc.id].setLatLng([loc.lat, loc.lng]);
+                }
+            });
+
+            setTimeout(startUpdates, 2000);
+        }
+
+        function focusLocation(id) {
+            const location = locations.find(loc => loc.id === id);
+            if (location && markers[id]) {
+                map.setView([location.lat, location.lng], 15);
+                markers[id].openPopup();
+            }
+        }
+
+        function showAllLocations() {
+            const bounds = L.latLngBounds(locations.map(loc => [loc.lat, loc.lng]));
+            map.fitBounds(bounds);
+        }
+
+        function toggleRealtime() {
+            console.log('Real-time updates toggled');
+        }
+
+        // Display location items with order ID in the sidebar
+        function displayLocationItems() {
+            const locationItemsContainer = document.getElementById("locationItems");
+            locationItemsContainer.innerHTML = ""; // Clear existing items
+
+            locations.forEach(loc => {
+                const item = document.createElement("div");
+                item.classList.add("location-item");
+                item.onclick = () => focusLocation(loc.id);
+                
+                item.innerHTML = `
+                    <h4>${loc.name}</h4>
+                    <p>Order ID: ${loc.orderID}</p>
+                    <p>Status: Active</p>
+                    <p>Last Updated: 2 mins ago</p>
+                `;
+                
+                locationItemsContainer.appendChild(item);
+            });
+        }
+
+        // Initialize map markers and display location items on page load
+        initializeMarkers();
+        displayLocationItems();
+    </script>
+</body>
+</html>

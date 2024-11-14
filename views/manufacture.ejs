@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Inventory Management with Location Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .role, .btn {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .role:hover, .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Drug Inventory Management</h1>
+        
+        <!-- Buttons to display each form -->
+        <button class="role" onclick="showSection('add-drug')">Add Drug (Manufacturer)</button>
+        <button class="role" onclick="showSection('retailer')">Extract Drug for Retailer</button>
+        <button class="role" onclick="showSection('consumer')">Extract Drug for Consumer</button>
+
+        <!-- Add Drug Form (Manufacturer) -->
+        <form id="add-drug-form" class="form-section">
+            <h2>Add New Drug</h2>
+            <div class="form-group">
+                <label for="drug-name">Drug Name:</label>
+                <input type="text" id="drug-name" name="drug-name" required>
+            </div>
+            <div class="form-group">
+                <label for="drug-category">Category:</label>
+                <input type="text" id="drug-category" name="drug-category" required>
+            </div>
+            <div class="form-group">
+                <label for="drug-price">Price per Unit:</label>
+                <input type="number" id="drug-price" name="drug-price" required>
+            </div>
+            <div class="form-group">
+                <label for="drug-quantity">Quantity:</label>
+                <input type="number" id="drug-quantity" name="drug-quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="manufacturer-location">Manufacturer Location:</label>
+                <input type="text" id="manufacturer-location" name="manufacturer-location" placeholder="e.g., Los Angeles, CA" required>
+            </div>
+            <button type="button" class="btn" onclick="addDrug()">Add Drug</button>
+        </form>
+
+        <!-- Retailer Extract Drug Form -->
+        <form id="retailer-form" class="form-section">
+            <h2>Extract Drug for Retailer</h2>
+            <div class="form-group">
+                <label for="retailer-drug-id">Drug ID:</label>
+                <input type="text" id="retailer-drug-id" name="retailer-drug-id" required>
+            </div>
+            <div class="form-group">
+                <label for="retailer-location">Retailer Location:</label>
+                <input type="text" id="retailer-location" name="retailer-location" placeholder="e.g., Dallas, TX" required>
+            </div>
+            <button type="button" class="btn" onclick="extractRetailerDrug()">Extract Drug</button>
+        </form>
+
+        <!-- Consumer Extract Drug Form -->
+        <form id="consumer-form" class="form-section">
+            <h2>Extract Drug for Consumer</h2>
+            <div class="form-group">
+                <label for="consumer-drug-id">Drug ID:</label>
+                <input type="text" id="consumer-drug-id" name="consumer-drug-id" required>
+            </div>
+            <div class="form-group">
+                <label for="consumer-location">Consumer Location:</label>
+                <input type="text" id="consumer-location" name="consumer-location" placeholder="e.g., New York, NY" required>
+            </div>
+            <button type="button" class="btn" onclick="extractConsumerDrug()">Extract Drug</button>
+        </form>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all form sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            // Show the selected form section
+            document.getElementById(sectionId + '-form').style.display = 'block';
+        }
+
+        function addDrug() {
+            const drugName = document.getElementById("drug-name").value;
+            const drugCategory = document.getElementById("drug-category").value;
+            const drugPrice = document.getElementById("drug-price").value;
+            const drugQuantity = document.getElementById("drug-quantity").value;
+            const manufacturerLocation = document.getElementById("manufacturer-location").value;
+
+            if (!drugName || !drugCategory || !drugPrice || !drugQuantity || !manufacturerLocation) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            alert(`Drug Added Successfully!\n\nName: ${drugName}\nCategory: ${drugCategory}\nPrice: ${drugPrice}\nQuantity: ${drugQuantity}\nLocation: ${manufacturerLocation}`);
+            document.getElementById("add-drug-form").reset();
+        }
+
+        function extractRetailerDrug() {
+            const drugId = document.getElementById("retailer-drug-id").value;
+            const retailerLocation = document.getElementById("retailer-location").value;
+            
+            if (!drugId || !retailerLocation) {
+                alert("Please enter all fields.");
+                return;
+            }
+
+            // Simulate fetching drug details based on ID and location
+            alert(`Retailer Drug Extracted:\n\nDrug ID: ${drugId}\nRetailer Location: ${retailerLocation}`);
+            document.getElementById("retailer-form").reset();
+        }
+
+        function extractConsumerDrug() {
+            const drugId = document.getElementById("consumer-drug-id").value;
+            const consumerLocation = document.getElementById("consumer-location").value;
+
+            if (!drugId || !consumerLocation) {
+                alert("Please enter all fields.");
+                return;
+            }
+
+            // Simulate fetching drug details based on ID and location
+            alert(`Consumer Drug Extracted:\n\nDrug ID: ${drugId}\nConsumer Location: ${consumerLocation}`);
+            document.getElementById("consumer-form").reset();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+/* Basic reset for margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light background */
+    color: #343a40; /* Dark grey text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.container {
+    background-color: white; /* White background for the form */
+    padding: 40px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 400px; /* Fixed width for the container */
+    text-align: center; /* Centered text */
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #28a745; /* Green color for title */
+    font-size: 2.5em; /* Larger title font */
+}
+
+h2 {
+    margin-bottom: 30px;
+    color: #6c757d; /* Light grey for subtitle */
+    font-size: 1.5em; /* Subtitle font size */
+}
+
+.input-container {
+    position: relative; /* Positioning for icon */
+    margin-bottom: 20px; /* Space between inputs */
+}
+
+.input-container i {
+    position: absolute;
+    left: 10px; /* Space from left */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for centering */
+    color: #6c757d; /* Light grey for icons */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Full width input */
+    padding: 15px 10px; /* Padding inside input */
+    padding-left: 40px; /* Space for icon */
+    border: 1px solid #ced4da; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Font size for inputs */
+    transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #28a745; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: space-between; /* Space between checkbox and link */
+    align-items: center; /* Align items vertically */
+    margin-bottom: 20px; /* Space below checkbox */
+}
+
+.forgot-password {
+    color: #28a745; /* Green color for the link */
+    text-decoration: none; /* Remove underline */
+}
+
+.forgot-password:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.login-btn {
+    background-color: #28a745; /* Green button */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 15px 20px; /* Button padding */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.1em; /* Button font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth transition */
+    width: 100%; /* Full width button */
+}
+
+.login-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.register-link {
+    margin-top: 20px; /* Space above the link */
+}
+
+.register-link a {
+    color: #28a745; /* Green color for link */
+    text-decoration: none; /* Remove underline */
+}
+
+.register-link a:hover {
+    text-decoration: underline; /* Underline on hover */
+}

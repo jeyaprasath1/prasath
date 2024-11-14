@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Inventory Product Order Grid</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script> <!-- Razorpay library -->
+    <style>
+        /* Existing styling remains the same */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            background-color: white;
+            position: relative;
+        }
+        .product-details h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+        .order-section button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background-color: #007bff;
+            cursor: pointer;
+        }
+        .remove-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Drug Inventory Product Order Grid</h1>
+    <button onclick="addNewCard()" style="padding: 10px 20px; font-size: 16px; margin-bottom: 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Add New Card</button>
+
+    <div class="product-container" id="product-container">
+        <!-- Dynamic product cards will be added here -->
+    </div>
+
+    <script>
+        let medicines = JSON.parse(localStorage.getItem('medicines')) || [
+            {
+                image: "https://via.placeholder.com/300x200?text=Medicine+1",
+                name: "Medicine 1",
+                description: "Description of Medicine 1 benefits.",
+                price: 750
+            }
+        ];
+
+        function loadProducts() {
+            const productContainer = document.getElementById('product-container');
+            productContainer.innerHTML = ""; // Clear the container
+
+            medicines.forEach((medicine, index) => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${medicine.image}" alt="${medicine.name}">
+                    <div class="product-details">
+                        <h3>${medicine.name}</h3>
+                        <p>${medicine.description}</p>
+                        <p class="price">₹${medicine.price}</p>
+                    </div>
+                    <div class="order-section">
+                        <button onclick="startPayment(${medicine.price}, '${medicine.name}')">Pay Now</button>
+                    </div>
+                    <button class="remove-button" onclick="removeCard(${index})">Remove</button>
+                `;
+                productContainer.appendChild(productCard);
+            });
+        }
+
+        function addNewCard() {
+            const image = prompt("Enter image URL:");
+            const name = prompt("Enter medicine name:");
+            const description = prompt("Enter medicine description:");
+            const price = parseFloat(prompt("Enter price (in ₹):"));
+
+            if (image && name && description && !isNaN(price)) {
+                medicines.push({ image, name, description, price });
+                localStorage.setItem('medicines', JSON.stringify(medicines));
+                loadProducts();
+            } else {
+                alert("Please fill in all fields to add a new product card.");
+            }
+        }
+
+        function removeCard(index) {
+            medicines.splice(index, 1); // Remove the card at the specified index
+            localStorage.setItem('medicines', JSON.stringify(medicines)); // Update localStorage
+            loadProducts(); // Reload the grid to reflect changes
+        }
+
+        function startPayment(amount, name) {
+            var options = {
+                "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay key
+                "amount": amount * 100, // Amount in paise
+                "currency": "INR",
+                "name": name,
+                "description": `Payment for ${name}`,
+                "handler": function (response) {
+                    alert("Payment successful. Payment ID: " + response.razorpay_payment_id);
+                },
+                "prefill": {
+                    "name": "Customer Name",
+                    "email": "customer@example.com",
+                    "contact": "9999999999"
+                },
+                "theme": {
+                    "color": "#007bff"
+                }
+            };
+
+            var rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>

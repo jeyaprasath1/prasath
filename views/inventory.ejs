@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Inventory Management</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            width: auto;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Drug Inventory Management</h1>
+
+        <!-- Add Drug Section -->
+        <div class="section" id="add-drug-section">
+            <h2>New Drug</h2>
+            <form id="add-drug-form">
+                <label for="drug-name">Drug Name:</label>
+                <input type="text" id="drug-name" name="drug_name" required>
+
+                <label for="drug-code">Drug Code:</label>
+                <input type="text" id="drug-code" name="drug_code" required>
+
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" required>
+
+                <label for="price">Price per Unit:</label>
+                <input type="number" id="price" name="price" required>
+
+                <label for="expiry-date">Expiry Date:</label>
+                <input type="date" id="expiry-date" name="expiry_date" required>
+
+                <button type="submit">Add Drug</button>
+            </form>
+        </div>
+
+        <!-- View Inventory Section -->
+        <div class="section" id="inventory-section">
+            <h2>Current Inventory</h2>
+            <table id="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Drug Name</th>
+                        <th>Drug Code</th>
+                        <th>Quantity</th>
+                        <th>Price per Unit</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Inventory items will be populated here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Supplier Details Section -->
+        <div class="section" id="supplier-section">
+            <h2>Supplier Details</h2>
+            <form id="add-supplier-form">
+                <label for="supplier-name">Supplier Name:</label>
+                <input type="text" id="supplier-name" name="supplier_name" required>
+
+                <label for="contact-info">Contact Information:</label>
+                <input type="text" id="contact-info" name="contact_info" required>
+
+                <button type="submit">Add Supplier</button>
+            </form>
+
+            <h3>Registered Suppliers</h3>
+            <table id="supplier-table">
+                <thead>
+                    <tr>
+                        <th>Supplier Name</th>
+                        <th>Contact Information</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Supplier data will be populated here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="/js/inventory.js"></script>
+</body>
+</html>

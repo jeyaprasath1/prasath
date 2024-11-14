@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Quality Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        section {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total-stock {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d9534f;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Medicine Quality Check & Stock Management</h1>
+</header>
+
+<section>
+    <h2>Available Medicine List</h2>
+    <table>
+        <tr>
+            <th>Medicine Name</th>
+            <th>Batch No</th>
+            <th>Expiry Date</th>
+            <th>Stock Available</th>
+        </tr>
+        <tr>
+            <td>Paracetamol</td>
+            <td>BCH001</td>
+            <td>12/2025</td>
+            <td class="stock">400</td>
+        </tr>
+        <tr>
+            <td>Amoxicillin</td>
+            <td>BCH002</td>
+            <td>06/2024</td>
+            <td class="stock">1000</td>
+        </tr>
+        <tr>
+            <td>Cetrizine</td>
+            <td>BCH003</td>
+            <td>09/2023</td>
+            <td class="stock">500</td>
+        </tr>
+    </table>
+
+    <button onclick="calculateTotalStock()">Check Total Stock</button>
+
+    <div id="totalStock" class="total-stock"></div>
+</section>
+
+<script>
+    function calculateTotalStock() {
+        // Get all elements with the class "stock"
+        const stockElements = document.querySelectorAll('.stock');
+        
+        let totalStock = 0;
+
+        // Sum all the stock values
+        stockElements.forEach(stockElement => {
+            totalStock += parseInt(stockElement.textContent);
+        });
+
+        // Display the total stock
+        document.getElementById('totalStock').textContent = 'Total Stock Available: ' + totalStock;
+    }
+</script>
+
+</body>
+</html>

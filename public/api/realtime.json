@@ -1,0 +1,4 @@
+[
+    { "drugName": "Aspirin", "quantity": 100, "status": "In Stock" },
+    { "drugName": "Ibuprofen", "quantity": 50, "status": "Low Stock" }
+]

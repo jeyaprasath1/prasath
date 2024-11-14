@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Stock Alerts</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- Link to your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #17a2b8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .alert-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .alert-content {
+            flex: 1;
+        }
+        .alert-content strong {
+            color: #d8000c;
+        }
+        .notify-btn {
+            padding: 10px 15px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Low Stock Notification Alerts</h1>
+</header>
+
+<div class="container">
+    <h2>Current Low Stock Alerts</h2>
+    <% if (drugs.length > 0) { %>
+        <% drugs.forEach(function(drug) { %>
+            <div class="alert-card">
+                <div class="alert-content">
+                    <strong>Alert:</strong> The stock for <%= drug.name %> is low (Current stock: <%= drug.stock %>, Threshold: <%= drug.threshold %>).
+                </div>
+                <a href="#" class="notify-btn" onclick="sendEmailAlert('<%= drug.name %>')">Notify Admin</a>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>No low stock alerts at the moment.</p>
+    <% } %>
+</div>
+
+<div class="footer">
+    <a href="/home" class="notify-btn">Back to Home</a>
+</div>
+<script src="/js/alert.js"></script>
+
+</body>
+</html>
