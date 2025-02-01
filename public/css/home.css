@@ -33,7 +33,7 @@ body {
 }
 
 .sidebar {
-    background-color: #343a40;
+    background-color: #1e626e9c;
     color: white;
     width: 220px;
     position: fixed;
@@ -67,7 +67,7 @@ body {
 }
 
 .sidebar ul li a i {
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .sidebar ul li a:hover {

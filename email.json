@@ -1,0 +1,13 @@
+{
+    "success": true,
+    "message": "Email sent successfully.",
+    "info": {
+        "accepted": ["prasathdhanam66@gmail.com"],
+        "rejected": [],
+        "response": "250 2.0.0 OK  1682639076 r23sm11427651pge.49 - gsmtp",
+        "envelopeTime": 359,
+        "messageTime": 868,
+        "messageSize": 707,
+        "responseTime": 19
+    }
+}

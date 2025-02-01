@@ -83,8 +83,7 @@
             medicines.forEach((medicine, index) => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
-                productCard.innerHTML = `
-                    <img src="${medicine.image}" alt="${medicine.name}">
+                productCard.innerHTML = `<img src="${medicine.image}" alt="${medicine.name}">
                     <div class="product-details">
                         <h3>${medicine.name}</h3>
                         <p>${medicine.description}</p>
@@ -93,8 +92,7 @@
                     <div class="order-section">
                         <button onclick="startPayment(${medicine.price}, '${medicine.name}')">Pay Now</button>
                     </div>
-                    <button class="remove-button" onclick="removeCard(${index})">Remove</button>
-                `;
+                    <button class="remove-button" onclick="removeCard(${index})">Remove</button>`;
                 productContainer.appendChild(productCard);
             });
         }

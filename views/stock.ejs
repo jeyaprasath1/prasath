@@ -6,49 +6,105 @@
     <title>Medicine Quality Check</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
+            color: #343a40;
         }
         header {
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
-            padding: 10px 20px;
+            padding: 20px 10px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
         }
         section {
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
+        table th, table td {
+            padding: 12px 15px;
             text-align: left;
         }
-        th {
+        table th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        table tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+        table tr:hover {
+            background-color: #f1f9ff;
+        }
+        table td {
+            border-bottom: 1px solid #ddd;
         }
         .total-stock {
             margin-top: 20px;
             font-weight: bold;
-            color: #d9534f;
+            font-size: 1.1rem;
+            color: #007bff;
+        }
+        button, input {
+            padding: 10px 15px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
         }
         button {
-            padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #0056b3;
+        }
+        .remove-btn {
+            background-color: #dc3545;
+        }
+        .remove-btn:hover {
+            background-color: #a71d2a;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input {
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        @media (max-width: 768px) {
+            table th, table td {
+                font-size: 0.85rem;
+            }
+            header h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -60,54 +116,114 @@
 
 <section>
     <h2>Available Medicine List</h2>
-    <table>
-        <tr>
-            <th>Medicine Name</th>
-            <th>Batch No</th>
-            <th>Expiry Date</th>
-            <th>Stock Available</th>
-        </tr>
-        <tr>
-            <td>Paracetamol</td>
-            <td>BCH001</td>
-            <td>12/2025</td>
-            <td class="stock">400</td>
-        </tr>
-        <tr>
-            <td>Amoxicillin</td>
-            <td>BCH002</td>
-            <td>06/2024</td>
-            <td class="stock">1000</td>
-        </tr>
-        <tr>
-            <td>Cetrizine</td>
-            <td>BCH003</td>
-            <td>09/2023</td>
-            <td class="stock">500</td>
-        </tr>
+    <table id="medicineTable">
+        <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Batch No</th>
+                <th>Expiry Date</th>
+                <th>Stock Available</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="medicineList">
+            <!-- Existing data -->
+        </tbody>
     </table>
 
     <button onclick="calculateTotalStock()">Check Total Stock</button>
-
     <div id="totalStock" class="total-stock"></div>
+
+    <h2>Add New Medicine</h2>
+    <div class="form-container">
+        <div class="form-group">
+            <input type="text" id="medicineName" placeholder="Medicine Name">
+        </div>
+        <div class="form-group">
+            <input type="text" id="batchNo" placeholder="Batch No">
+        </div>
+        <div class="form-group">
+            <input type="text" id="expiryDate" placeholder="Expiry Date (MM/YYYY)">
+        </div>
+        <div class="form-group">
+            <input type="number" id="stock" placeholder="Stock Available">
+        </div>
+        <button onclick="addMedicine()">Add Medicine</button>
+    </div>
 </section>
 
 <script>
-    function calculateTotalStock() {
-        // Get all elements with the class "stock"
-        const stockElements = document.querySelectorAll('.stock');
-        
-        let totalStock = 0;
+    // Retrieve stored data from localStorage or use default
+    let medicineData = JSON.parse(localStorage.getItem('medicineData')) || [
+        { name: 'Paracetamol', batch: 'BCH001', expiry: '12/2025', stock: 400 },
+        { name: 'Amoxicillin', batch: 'BCH002', expiry: '06/2024', stock: 1000 },
+        { name: 'Cetrizine', batch: 'BCH003', expiry: '09/2023', stock: 500 }
+    ];
 
-        // Sum all the stock values
-        stockElements.forEach(stockElement => {
-            totalStock += parseInt(stockElement.textContent);
+    // Function to render the medicine list
+    function renderMedicineList() {
+        const medicineList = document.getElementById('medicineList');
+        medicineList.innerHTML = ''; // Clear the table body
+        medicineData.forEach((medicine, index) => {
+            const row = `<tr>
+                <td>${medicine.name}</td>
+                <td>${medicine.batch}</td>
+                <td>${medicine.expiry}</td>
+                <td class="stock">${medicine.stock}</td>
+                <td><button class="remove-btn" onclick="removeMedicine(${index})">Remove</button></td>
+            </tr>`;
+            medicineList.innerHTML += row;
         });
+    }
 
-        // Display the total stock
+    // Function to calculate total stock
+    function calculateTotalStock() {
+        const totalStock = medicineData.reduce((sum, medicine) => sum + medicine.stock, 0);
         document.getElementById('totalStock').textContent = 'Total Stock Available: ' + totalStock;
     }
+
+    // Function to add a new medicine
+    function addMedicine() {
+        const name = document.getElementById('medicineName').value.trim();
+        const batch = document.getElementById('batchNo').value.trim();
+        const expiry = document.getElementById('expiryDate').value.trim();
+        const stock = parseInt(document.getElementById('stock').value);
+
+        if (!name || !batch || !expiry || isNaN(stock) || stock <= 0) {
+            alert('Please fill in all fields with valid data.');
+            return;
+        }
+
+        const newMedicine = { name, batch, expiry, stock };
+        medicineData.push(newMedicine);
+
+        // Save updated data to localStorage
+        localStorage.setItem('medicineData', JSON.stringify(medicineData));
+
+        // Re-render the table and clear input fields
+        renderMedicineList();
+        document.getElementById('medicineName').value = '';
+        document.getElementById('batchNo').value = '';
+        document.getElementById('expiryDate').value = '';
+        document.getElementById('stock').value = '';
+    }
+
+    // Function to remove a medicine
+    function removeMedicine(index) {
+        // Remove the selected medicine
+        medicineData.splice(index, 1);
+
+        // Save the updated list to localStorage
+        localStorage.setItem('medicineData', JSON.stringify(medicineData));
+
+        // Re-render the table
+        renderMedicineList();
+    }
+
+    // Initial render of the table
+    renderMedicineList();
 </script>
 
 </body>
 </html>
+   

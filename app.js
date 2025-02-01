@@ -16,6 +16,7 @@ dotenv.config(); // Load environment variables from .env
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+require('dotenv').config();
 
 let orders = {
     '12345': { id: '12345', customer: 'John Doe', product: 'Laptop', status: 'In Transit', location: { lat: 51.505, lng: -0.09 } },
@@ -389,8 +390,8 @@ app.get('/setting', (req, res) => {
     res.render('setting');
      // Render real-time tracking page
 });
-app.get('/manufacture', (req, res) => {
-    res.render('manufacture');
+app.get('/complaint', (req, res) => {
+    res.render('complaint');
      // Render real-time tracking page
 });
 

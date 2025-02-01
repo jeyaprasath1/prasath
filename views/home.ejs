@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,167 +12,244 @@
     <link rel="stylesheet" href="/css/home.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
         }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
-        }
-
+    
+        /* Header Styling */
         .header {
-            background-color: #4CAF50;
-            padding: 15px;
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
             text-align: center;
-            color: white;
+            position: relative;
         }
-
+    
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+    
+        .language-selection {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    
+        /* Sidebar Styling */
         .sidebar {
-            width: 250px;
-            height: 100%;
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #333;
-            padding-top: 20px;
-            color: white;
+            width: 250px;
+            height: 100%;
+            background-color: #212529;
+            color: #fff;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            z-index: 1000;
         }
-
-        .sidebar ul {
-            list-style-type: none;
+    
+        .sidebar.visible {
+            transform: translateX(0);
         }
-
-        .sidebar ul li {
-            padding: 10px;
-            text-align: left;
-        }
-
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 8px;
-            border-radius: 5px;
-        }
-
-        .sidebar ul li a:hover {
-            background-color: #575757;
-        }
-
-        .main-content {
-            margin-left: 260px;
+    
+        .sidebar h2 {
             padding: 20px;
+            
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+            background-color: #343a40;
         }
-
+    
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+    
+        .sidebar ul li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+    
+        .sidebar ul li a:hover {
+            background-color: #495057;
+        }
+    
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+    
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background-color: #495057;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: background-color 0.3s ease;
+        }
+    
+        .sidebar-toggle:hover {
+            background-color: #343a40;
+        }
+    
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+    
+        .main-content h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+    
+        /* Cards */
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    
+        .card i {
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+    
+        .card h3 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #495057;
+        }
+    
+        .card p {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+    
+        .card button a {
+            color: #fff;
+            text-decoration: none;
+        }
+    
+        /* Notifications Section */
         .notifications {
             margin-top: 30px;
             padding: 20px;
             background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
+    
         .notifications h2 {
             font-size: 1.5rem;
             margin-bottom: 15px;
+            color: #343a40;
         }
-
+    
         .notification-item {
-            padding: 20px;
-            border-top: 1px solid #ddd;
-            margin-bottom: 10px;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .notification-item:first-child {
-            border-top: none;
+    
+        .notification-item:last-child {
+            border-bottom: none;
         }
-
-        .notification-link {
-            color: #4CAF50;
+    
+        .notification-item a {
+            color: #007bff;
             text-decoration: none;
-            font-weight: bold;
         }
-
-        .notification-link:hover {
+    
+        .notification-item a:hover {
             text-decoration: underline;
         }
-
-        /* Fade-in animation */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Add a style for the "Add Notification" button */
-        .add-notification-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+    
+        .remove-notification-btn {
+            background-color: #dc3545;
+            color: #fff;
             border: none;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
         }
-
-        .add-notification-btn:hover {
-            background-color: #45a049;
+    
+        .remove-notification-btn:hover {
+            background-color: #c82333;
         }
-
-        /* Modal styles */
+    
+        /* Modal Styling */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
         }
-
+    
         .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
+            background-color: #fff;
+            margin: 10% auto;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
+            width: 50%;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+    
+        .modal-content h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #343a40;
         }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+    
+        .modal-content textarea {
+            width: 100%;
+            resize: none;
+            font-size: 1rem;
+        }
+    
+        .modal-content .btn {
+            margin-top: 10px;
         }
     </style>
+    
 </head>
 
 <body>
-
-    <!-- Header with Language Selection -->
     <div class="header">
         <h1>MEDIX - Drug Tracking System</h1>
         <!-- Language Selection Dropdown -->
@@ -190,16 +268,20 @@
         </div>
     </div>
 
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Menu</h2>
+        <br>
         <ul>
             <li><a href="/home"><i class="fa fa-home" aria-hidden="true"></i><span class="sidebar-item">Dashboard</span></a></li>
             <li><a href="/inventory"><i class="fas fa-boxes"></i><span class="sidebar-item">Inventory Management</span></a></li>
             <li><a href="/realtime"><i class="fas fa-map-marker-alt"></i><span class="sidebar-item">Real-Time Tracking</span></a></li>
             <li><a href="/order"><i class="fas fa-shopping-cart"></i><span class="sidebar-item">Order Payment</span></a></li>
             <li><a href="/card"><i class="fa-solid fa-cart-shopping"></i><span class="sidebar-item">Order Card</span></a></li>
-            <li><a href="/manufacture"><i class="fa-solid fa-store"></i><span class="sidebar-item">Manufacture</span></a></li>
+            <li><a href="/complaint"><i class="fa-solid fa-store"></i><span class="sidebar-item">Complaint</span></a></li>
             <li><a href="/analytics"><i class="fas fa-chart-line"></i><span class="sidebar-item">Analytics & Reports</span></a></li>
             <li><a href="/setting"><i class="fas fa-cog"></i><span class="sidebar-item">Settings</span></a></li>
             <li><a href="/index.html"><i class="fa fa-sign-out" aria-hidden="true"></i><span class="sidebar-item">Logout</span></a></li>
@@ -237,99 +319,148 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="notifications">
+            <h2><i class="fa-solid fa-bell"></i>User Notifications</h2>
+            <!-- Existing Notifications will be loaded dynamically -->
+        </div>
+        
+        <!-- Add Notification Modal -->
+        <button class="add-notification-btn" onclick="openModal()">Add Notification</button>
 
-            <!-- Notifications Section -->
-            <div class="notifications">
-                <h2><i class="fa-solid fa-bell"></i>User Notifications</h2>
-                <div class="notification-item">
-                    Order #12345 has been shipped.
-                    <a href="/order" class="notification-link">View Order</a>
-                </div>
-                <div class="notification-item">
-                    5 Expired Items in your inventory.
-                    <a href="/inventory" class="notification-link">Check Inventory</a>
-                </div>
-                <div class="notification-item">
-                    New stock of 'MedX' drug available.
-                    <a href="/inventory" class="notification-link">View Stock</a>
-                </div>
-            </div>
-            
-            <!-- Add Notification Modal -->
-            <button class="add-notification-btn" onclick="openModal()">Add Notification</button>
-
-            <div id="notificationModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
-                    <h2>Add New Notification</h2>
-                    <textarea id="notificationText" class="form-control" rows="3" placeholder="Enter your notification here..."></textarea>
-                    <br>
-                    <button class="btn btn-primary" onclick="addNotification()">Add Notification</button>
-                </div>
+        <div id="notificationModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Add New Notification</h2>
+                <textarea id="notificationText" class="form-control" rows="3" placeholder="Enter your notification here..."></textarea>
+                <br>
+                <button class="btn btn-primary" onclick="addNotification()">Add Notification</button>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        // Function to open the modal
-        function openModal() {
-            document.getElementById("notificationModal").style.display = "block";
+        // Function to toggle the sidebar visibility
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('visible');
         }
+        
+function openModal() {
+    document.getElementById("notificationModal").style.display = "block";
+}
 
-        // Function to close the modal
-        function closeModal() {
-            document.getElementById("notificationModal").style.display = "none";
-        }
+// Function to close the modal
+function closeModal() {
+    document.getElementById("notificationModal").style.display = "none";
+}
 
-        // Function to add a notification
-        function addNotification() {
-            var notificationText = document.getElementById("notificationText").value;
-            if (notificationText.trim() === "") {
-                alert("Please enter a valid notification.");
-                return;
-            }
+// Function to add a notification
+function addNotification() {
+    var notificationText = document.getElementById("notificationText").value;
+    if (notificationText.trim() === "") {
+        alert("Please enter a valid notification.");
+        return;
+    }
 
-            // Add the new notification dynamically
-            var notificationsContainer = document.querySelector(".notifications");
-            var newNotification = document.createElement("div");
-            newNotification.classList.add("notification-item");
-            newNotification.innerHTML = notificationText + ' <a href="/inventory" class="notification-link">View Details</a>';
-            notificationsContainer.insertBefore(newNotification, notificationsContainer.children[0]);
+    // Determine the link based on notification content
+    var notificationLink = '/inventory';  // Default link
+    if (notificationText.includes('Order')) {
+        notificationLink = '/order';
+    } else if (notificationText.includes('Expired')) {
+        notificationLink = '/inventory';
+    } else if (notificationText.includes('Stock')) {
+        notificationLink = '/inventory';
+    } else if (notificationText.includes('Shipment')) {
+        notificationLink = '/realtime';
+    } else if (notificationText.includes('complaint')) {
+        notificationLink = '/complaint';
+    } else if (notificationText.includes('Analytics')) {
+        notificationLink = '/analytics';
+    } else if (notificationText.includes('Report')) {
+        notificationLink = '/analytics';
+    }
 
-            // Save the new notification to localStorage
-            saveNotificationToLocalStorage(notificationText);
+    // Add the new notification dynamically
+    var notificationsContainer = document.querySelector(".notifications");
+    var newNotification = document.createElement("div");
+    newNotification.classList.add("notification-item");
 
-            // Clear the textarea and close the modal
-            document.getElementById("notificationText").value = "";
-            closeModal();
-        }
+    newNotification.innerHTML = ` 
+        ${notificationText} 
+        <a href="${notificationLink}" class="notification-link">View Details</a> 
+        <button class="remove-notification-btn" onclick="removeNotification(this)">Remove</button>
+    `;
 
-        // Function to save notification to localStorage
-        function saveNotificationToLocalStorage(notificationText) {
-            let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-            notifications.unshift(notificationText); // Add new notification to the start of the array
-            localStorage.setItem("notifications", JSON.stringify(notifications)); // Save back to localStorage
-        }
+    // Insert the new notification at the top
+    notificationsContainer.insertBefore(newNotification, notificationsContainer.children[0]);
 
-        // Function to load notifications from localStorage on page load
-        function loadNotifications() {
-            let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-            var notificationsContainer = document.querySelector(".notifications");
+    // Store the new notification in localStorage
+    storeNotification(notificationText, notificationLink);
 
-            // Loop through the notifications and display them
-            notifications.forEach(function(notificationText) {
-                var newNotification = document.createElement("div");
-                newNotification.classList.add("notification-item");
-                newNotification.innerHTML = notificationText + ' <a href="" class="notification-link">View Details</a>';
-                notificationsContainer.appendChild(newNotification);
-            });
-        }
+    // Clear the textarea and close the modal
+    document.getElementById("notificationText").value = "";
+    closeModal();
+}
 
-        // Load notifications on page load
-        window.onload = loadNotifications;
+// Function to store notification in localStorage
+function storeNotification(notificationText, notificationLink) {
+    var notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+    var notificationData = { text: notificationText, link: notificationLink };
+    notifications.unshift(notificationData); // Add at the start
+
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+}
+
+// Function to load notifications from localStorage
+function loadNotifications() {
+    var notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+
+    notifications.forEach(function(notificationData) {
+        var notificationsContainer = document.querySelector(".notifications");
+        var newNotification = document.createElement("div");
+        newNotification.classList.add("notification-item");
+
+        newNotification.innerHTML = `
+            ${notificationData.text} 
+            <a href="${notificationData.link}" class="notification-link">View Details</a> 
+            <button class="remove-notification-btn" onclick="removeNotification(this)">Remove</button>
+        `;
+
+        notificationsContainer.appendChild(newNotification);
+    });
+}
+
+// Function to remove a notification
+function removeNotification(button) {
+    var notificationItem = button.closest(".notification-item");
+    notificationItem.remove();
+    updateLocalStorage();
+}
+
+// Update localStorage after removal
+function updateLocalStorage() {
+    var notifications = [];
+    var notificationItems = document.querySelectorAll(".notification-item");
+
+    notificationItems.forEach(function(item) {
+        var text = item.firstChild.nodeValue.trim();
+        var link = item.querySelector(".notification-link").getAttribute("href");
+        notifications.push({ text: text, link: link });
+    });
+
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+}
+
+// Load notifications when page loads
+window.onload = loadNotifications;
+
     </script>
-<script src="/js/home.js"></script>
+
+    <script src="/js/home.js"></script>
 </body>
 
 </html>
+

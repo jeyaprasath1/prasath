@@ -86,6 +86,29 @@
     <a href="/home" class="notify-btn">Back to Home</a>
 </div>
 <script src="/js/alert.js"></script>
+<script>
+    function sendEmailAlert(drugName) {
+    fetch('/send-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ drugName })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`Email alert sent for ${drugName}`);
+        } else {
+            alert('Failed to send email. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while sending the email.');
+    });
+}
 
+</script>
 </body>
 </html>

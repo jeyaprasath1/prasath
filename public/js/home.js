@@ -35,7 +35,7 @@ const translations = {
         realTimeTracking: "உண்மைக் கால கண்காணிப்பு",
         orderProcessing: "அரிசி செயலாக்கம்",
         orderCard: "அரிசி அட்டை",
-        manufacture: "தயாரிப்பு",
+        complaint: "புகார்",
         analyticsReports: "அணுகுமுறை & அறிக்கைகள்",
         settings: "அமைப்புகள்",
         logout: "வெளியேறு",
@@ -75,7 +75,7 @@ function changeLanguage() {
     document.querySelector('.sidebar ul li:nth-child(3) a').innerText = translations[selectedLanguage].realTimeTracking;
     document.querySelector('.sidebar ul li:nth-child(4) a').innerText = translations[selectedLanguage].orderProcessing;
     document.querySelector('.sidebar ul li:nth-child(5) a').innerText = translations[selectedLanguage].orderCard;
-    document.querySelector('.sidebar ul li:nth-child(6) a').innerText = translations[selectedLanguage].manufacture;
+    document.querySelector('.sidebar ul li:nth-child(6) a').innerText = translations[selectedLanguage].complaint;
     document.querySelector('.sidebar ul li:nth-child(7) a').innerText = translations[selectedLanguage].analyticsReports;
     document.querySelector('.sidebar ul li:nth-child(8) a').innerText = translations[selectedLanguage].settings;
     document.querySelector('.sidebar ul li:nth-child(9) a').innerText = translations[selectedLanguage].logout;

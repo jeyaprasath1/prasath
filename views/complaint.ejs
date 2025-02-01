@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Care - Product Issue Complaint</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .form-container h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .complaint-list {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .complaint-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .complaint-item:last-child {
+            border-bottom: none;
+        }
+
+        .btn-remove {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-remove:hover {
+            background-color: #b02a37;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Product Issue Complaint Form</h1>
+            <form id="complaintForm">
+                <div class="form-group">
+                    <label for="userName">Your Name</label>
+                    <input type="text" class="form-control" id="userName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" class="form-control" id="productName" placeholder="Enter the product name" required>
+                </div>
+                <div class="form-group">
+                    <label for="issueDetails">Issue Details</label>
+                    <textarea class="form-control" id="issueDetails" rows="5" placeholder="Describe the issue in detail"
+                        required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number</label>
+                    <input type="tel" class="form-control" id="contactNumber" placeholder="Enter your contact number"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="attachment">Attach Evidence (optional)</label>
+                    <input type="file" class="form-control-file" id="attachment">
+                </div>
+                <button type="submit" class="btn btn-submit btn-block">Submit Complaint</button>
+            </form>
+        </div>
+
+        <div class="complaint-list" id="complaintList">
+            <h2>Submitted Complaints</h2>
+            <!-- Complaints will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('complaintForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Collect form data
+            const userName = document.getElementById('userName').value;
+            const email = document.getElementById('email').value;
+            const productName = document.getElementById('productName').value;
+            const issueDetails = document.getElementById('issueDetails').value;
+            const contactNumber = document.getElementById('contactNumber').value;
+
+            // Create a complaint object
+            const complaint = {
+                userName,
+                email,
+                productName,
+                issueDetails,
+                contactNumber,
+                date: new Date().toLocaleString(),
+            };
+
+            // Store complaint in localStorage
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            complaints.push(complaint);
+            localStorage.setItem('complaints', JSON.stringify(complaints));
+
+            // Reset the form
+            document.getElementById('complaintForm').reset();
+
+            // Refresh complaint list
+            displayComplaints();
+        });
+
+        // Function to display complaints
+        function displayComplaints() {
+            const complaintList = document.getElementById('complaintList');
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+
+            // Clear existing complaints
+            complaintList.innerHTML = '<h2>Submitted Complaints</h2>';
+
+            // Display all complaints
+            complaints.forEach((complaint, index) => {
+                const complaintItem = document.createElement('div');
+                complaintItem.className = 'complaint-item';
+                complaintItem.innerHTML = `
+                    <div>
+                        <strong>${index + 1}. ${complaint.productName}</strong> - ${complaint.issueDetails}<br>
+                        <em>Submitted by: ${complaint.userName} (${complaint.email}) on ${complaint.date}</em><br>
+                        <span>Contact: ${complaint.contactNumber}</span>
+                    </div>
+                    <button class="btn-remove" onclick="removeComplaint(${index})">Remove</button>
+                `;
+                complaintList.appendChild(complaintItem);
+            });
+        }
+
+        // Function to remove a complaint
+        function removeComplaint(index) {
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            complaints.splice(index, 1); // Remove the selected complaint
+            localStorage.setItem('complaints', JSON.stringify(complaints)); // Update localStorage
+            displayComplaints(); // Refresh the display
+        }
+
+        // Display complaints on page load
+        displayComplaints();
+    </script>
+</body>
+
+</html>
