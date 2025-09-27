@@ -396,6 +396,11 @@ app.get('/complaint', (req, res) => {
 });
 
 // Start the server
-app.listen(4000, () => {
+// இந்த வரியை மாற்றவும்:
+// app.listen(4000, () => {
+
+// இப்படி மாற்றவும்:
+server.listen(4000, () => {
     console.log('Server is running on http://localhost:4000');
 });
+
